@@ -48,7 +48,9 @@ class Transaction extends Model implements TransactionInterface {
         }
     }
 
-    //   public static async deleteTransaction() {}
+    public static async deleteTransaction(id: number) {
+        return await Transaction.query().deleteById(id);
+    }
 }
 
 export default Transaction;

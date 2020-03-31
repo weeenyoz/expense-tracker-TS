@@ -29,6 +29,13 @@ export const addTransaction: RequestHandler = async (req, res, next) => {
  * DELETE transaction
  * /api/v1/transaction/:id
  */
-export const deleteTransaction: RequestHandler = (req, res, next) => {
-    res.send(`DELETE Transaction ${req.params.id}`);
+export const deleteTransaction: RequestHandler = async (req, res, next) => {
+    const id = parseInt(req.params.id);
+
+    try {
+        const result = await Transaction.deleteTransaction(id);
+        result && res.status(204).send();
+    } catch (error) {
+        next(error);
+    }
 };
