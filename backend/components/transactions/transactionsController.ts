@@ -28,7 +28,19 @@ export const addTransaction: RequestHandler = async (req, res, next) => {
         const result = await Transaction.addTransaction({ ...data });
         result && res.status(204).send();
     } catch (error) {
-        next(error);
+        if (error.name === 'ValidationError') {
+            const { data } = error;
+
+            const invalidProperties = Object.keys(error.data);
+
+            const messages = invalidProperties.map(
+                (invalidProperty) => `${invalidProperty} ${data[invalidProperty][0].message}`,
+            );
+
+            res.status(400).json({ messages });
+        } else {
+            next(error);
+        }
     }
 };
 

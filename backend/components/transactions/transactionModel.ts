@@ -38,14 +38,10 @@ class Transaction extends Model implements TransactionInterface {
     }
 
     public static async addTransaction(data: TransactionInterface, options?: UpsertGraphOptions) {
-        try {
-            const result: any = await transaction(Transaction, async (Transaction) => {
-                return await Transaction.query().upsertGraphAndFetch(data, options);
-            });
-            return result;
-        } catch (error) {
-            console.log(error);
-        }
+        const result = await transaction(Transaction, async (Transaction) => {
+            return await Transaction.query().upsertGraphAndFetch(data, options);
+        });
+        return result;
     }
 
     public static async deleteTransaction(id: number[]) {
