@@ -6,8 +6,15 @@ import Transaction from './transactionModel';
  * /api/v1/transaction/
  */
 export const getTransactions: RequestHandler = async (req, res, next) => {
-    const result = await Transaction.getTransactions();
-    res.send('GET Transactions');
+    try {
+        const result = await Transaction.getTransactions();
+        result &&
+            res.status(200).json({
+                transactions: result,
+            });
+    } catch (error) {
+        next(error);
+    }
 };
 
 /**
