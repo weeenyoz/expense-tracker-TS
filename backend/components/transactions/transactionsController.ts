@@ -37,7 +37,7 @@ export const addTransaction: RequestHandler = async (req, res, next) => {
                 (invalidProperty) => `${invalidProperty} ${data[invalidProperty][0].message}`,
             );
 
-            res.status(400).json({ messages });
+            res.status(400).json({ error: messages });
         } else {
             next(error);
         }
