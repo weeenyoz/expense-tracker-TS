@@ -29,12 +29,10 @@ class Transaction extends Model implements TransactionInterface {
     }
 
     public static async getTransactions() {
-        try {
-            const result = await transaction(Transaction, async (Transaction) => {
-                return await Transaction.query().column('id', 'text', 'amount');
-            });
-            return result;
-        } catch (error) {}
+        const result = await transaction(Transaction, async (Transaction) => {
+            return await Transaction.query().column('id', 'text', 'amount');
+        });
+        return result;
     }
 
     public static async addTransaction(data: TransactionInterface, options?: UpsertGraphOptions) {
@@ -45,11 +43,7 @@ class Transaction extends Model implements TransactionInterface {
     }
 
     public static async deleteTransaction(id: number[]) {
-        try {
-            return await Transaction.query().deleteById(id);
-        } catch (error) {
-            console.log(error);
-        }
+        return await Transaction.query().deleteById(id);
     }
 }
 
