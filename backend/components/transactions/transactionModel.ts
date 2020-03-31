@@ -33,7 +33,6 @@ class Transaction extends Model implements TransactionInterface {
             const result = await transaction(Transaction, async (Transaction) => {
                 return await Transaction.query().column('id', 'text', 'amount');
             });
-            console.log('result in getTransactions model :', result);
             return result;
         } catch (error) {}
     }

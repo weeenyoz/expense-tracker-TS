@@ -7,7 +7,6 @@ import Transaction from './transactionModel';
  */
 export const getTransactions: RequestHandler = async (req, res, next) => {
     const result = await Transaction.getTransactions();
-    console.log('resut in getTransactions controller', result);
     res.send('GET Transactions');
 };
 
