@@ -37,11 +37,13 @@ export const addTransaction: RequestHandler = async (req, res, next) => {
  * /api/v1/transaction/:id
  */
 export const deleteTransaction: RequestHandler = async (req, res, next) => {
-    const id = parseInt(req.params.id);
+    const id = [parseInt(req.params.id)];
 
     try {
         const result = await Transaction.deleteTransaction(id);
-        result && res.status(204).send();
+        result && result > 0
+            ? res.status(200).json({ message: 'Transaction deleted' })
+            : res.status(404).json({ message: 'No record found' });
     } catch (error) {
         next(error);
     }

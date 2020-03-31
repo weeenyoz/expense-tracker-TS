@@ -48,8 +48,12 @@ class Transaction extends Model implements TransactionInterface {
         }
     }
 
-    public static async deleteTransaction(id: number) {
-        return await Transaction.query().deleteById(id);
+    public static async deleteTransaction(id: number[]) {
+        try {
+            return await Transaction.query().deleteById(id);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 
