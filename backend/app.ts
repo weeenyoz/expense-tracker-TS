@@ -1,9 +1,13 @@
+import path from 'path';
 import mysql from 'mysql';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import errorHandler from './middleware/error';
 import transactionsRoutes from './components/transactions/transactionsAPI';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
@@ -28,5 +32,16 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/v1/transactions', transactionsRoutes);
 app.use(errorHandler);
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+
+    console.log('__dirname:', __dirname);
+    console.log(path.resolve(__dirname, '../', 'client', 'build', 'index.html'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../', 'client', 'build', 'index.html'));
+    });
+}
 
 export default app;
