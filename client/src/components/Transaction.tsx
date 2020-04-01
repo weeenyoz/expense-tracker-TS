@@ -9,6 +9,11 @@ const Transaction: React.FC<TransactionProps> = (props: TransactionProps) => {
 
     const sign = amount < 0 ? '-' : '+';
 
+    const deleteHandler = async () => {
+        const deleteAction = await deleteTransaction(id);
+        dispatch(deleteAction);
+    };
+
     return (
         <>
             <li className={sign === '-' ? 'minus' : 'plus'}>
@@ -17,7 +22,7 @@ const Transaction: React.FC<TransactionProps> = (props: TransactionProps) => {
                     {/* remove negative sign from negative value to display absolute number after +/- sign */}
                     {sign}${Math.abs(amount)}
                 </span>
-                <button className="delete-btn" onClick={() => dispatch(deleteTransaction(id))}>
+                <button className="delete-btn" onClick={deleteHandler}>
                     x
                 </button>
             </li>
