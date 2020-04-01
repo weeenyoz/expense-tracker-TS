@@ -26,7 +26,7 @@ export const addTransaction: RequestHandler = async (req, res, next) => {
 
     try {
         const result = await Transaction.addTransaction({ ...data });
-        result && res.status(204).send();
+        result && res.status(201).json({ newTransaction: result });
     } catch (error) {
         if (error.name === 'ValidationError') {
             const { data } = error;
