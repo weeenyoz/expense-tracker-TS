@@ -17,7 +17,7 @@ const AppReducer = (state: GlobalContextProps, action: Action): GlobalContextPro
         case 'ADD_TRANSACTION':
             return {
                 ...state,
-                transactions: [action.payload as TransactionProps, ...state.transactions],
+                transactions: [...state.transactions, action.payload as TransactionProps],
             };
         case 'TRANSACTIONS_ERROR':
             return {
