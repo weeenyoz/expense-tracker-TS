@@ -1,4 +1,5 @@
 import { Model, UpsertGraphOptions, transaction } from 'objection';
+import _ from 'lodash';
 
 const knex = require('../../db/knex');
 Model.knex(knex);
@@ -37,7 +38,11 @@ class Transaction extends Model implements TransactionInterface {
 
     public static async addTransaction(data: TransactionInterface, options?: UpsertGraphOptions) {
         const result = await transaction(Transaction, async (Transaction) => {
-            return await Transaction.query().upsertGraphAndFetch(data, options);
+            return await Transaction.query()
+                .upsertGraphAndFetch(data, options)
+                .then((res) => {
+                    return _.omit(res, ['created_at', 'updated_at']);
+                });
         });
         return result;
     }
