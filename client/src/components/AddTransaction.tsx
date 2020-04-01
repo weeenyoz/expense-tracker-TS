@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { GlobalContext, TransactionProps, NewTransactionVariables } from '../context/GlobalState';
+import { GlobalContext, NewTransactionVariables } from '../context/GlobalState';
 import { addTransaction } from '../context/Actions';
 
 const AddTransaction = () => {

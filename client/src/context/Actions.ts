@@ -34,9 +34,10 @@ export const getTransactions = async (): Promise<GetTransactionsAction> => {
     }
 };
 
-export const addTransaction = async (newTransaction: NewTransactionVariables): Promise<AddAction> => {
+export const addTransaction = async (transaction: NewTransactionVariables) => {
     try {
-        await axios.post('/api/v1/transactions', newTransaction);
+        const result = await axios.post('/api/v1/transactions', transaction);
+        const { newTransaction } = result.data;
 
         return {
             type: 'ADD_TRANSACTION',
