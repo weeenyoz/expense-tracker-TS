@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { TransactionProps, GlobalContext } from '../context/GlobalState';
+import { deleteTransaction } from '../context/Actions';
 
 const Transaction: React.FC<TransactionProps> = (props: TransactionProps) => {
     const { id, text, amount } = props;
@@ -8,11 +9,9 @@ const Transaction: React.FC<TransactionProps> = (props: TransactionProps) => {
 
     const sign = amount < 0 ? '-' : '+';
 
-    const deleteTransaction = () => {
-        dispatch({
-            type: 'DELETE_TRANSACTION',
-            payload: id,
-        });
+    const deleteHandler = async () => {
+        const deleteAction = await deleteTransaction(id);
+        dispatch(deleteAction);
     };
 
     return (
@@ -23,7 +22,7 @@ const Transaction: React.FC<TransactionProps> = (props: TransactionProps) => {
                     {/* remove negative sign from negative value to display absolute number after +/- sign */}
                     {sign}${Math.abs(amount)}
                 </span>
-                <button className="delete-btn" onClick={deleteTransaction}>
+                <button className="delete-btn" onClick={deleteHandler}>
                     x
                 </button>
             </li>

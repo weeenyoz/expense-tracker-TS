@@ -1,5 +1,6 @@
-import React, { createContext, useReducer, Dispatch } from 'react';
+import React, { useEffect, createContext, useReducer, Dispatch } from 'react';
 import AppReducer from './AppReducer';
+import { getTransactions } from './Actions';
 
 export interface TransactionProps {
     id: number;
@@ -7,26 +8,37 @@ export interface TransactionProps {
     amount: number;
 }
 
+export type NewTransactionVariables = Omit<TransactionProps, 'id'>;
+
 export interface GlobalContextProps {
     transactions: Array<TransactionProps>;
+    loading: boolean;
+    error: string[];
     dispatch: Dispatch<AddAction | DeleteAction>;
 }
 
 export interface DeleteAction {
     type: string;
-    payload: number;
+    payload: number | GlobalContextProps['error'];
 }
 
 export interface AddAction {
     type: string;
-    payload: TransactionProps;
+    payload: TransactionProps | NewTransactionVariables | GlobalContextProps['error'];
 }
 
-export type Action = DeleteAction | AddAction;
+export interface GetTransactionsAction {
+    type: string;
+    payload: TransactionProps[] | GlobalContextProps['error'];
+}
+
+export type Action = DeleteAction | AddAction | GetTransactionsAction;
 
 // initial state
 const initialState: GlobalContextProps = {
     transactions: [],
+    loading: true,
+    error: [''],
     dispatch: () => {
         return null;
     },
@@ -40,10 +52,19 @@ const GlobalStateProvider = (props: any) => {
 
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
+    const getAllTransactions = async () => {
+        const getTransactionsAction = await getTransactions();
+        dispatch(getTransactionsAction);
+    };
+
+    useEffect(() => {
+        getAllTransactions();
+    }, []);
+
     return (
         <GlobalContext.Provider
             value={{
-                transactions: state.transactions,
+                ...state,
                 dispatch,
             }}
         >
