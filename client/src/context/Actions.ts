@@ -2,13 +2,19 @@ import axios from 'axios';
 import { AddAction, DeleteAction, GetTransactionsAction } from './GlobalState';
 
 export const deleteTransaction = async (id: number): Promise<DeleteAction> => {
-    const result = await axios.delete(`/api/v1/transactions/${id}`);
-    console.log('result in deleteTransactions: ', result);
+    try {
+        await axios.delete(`/api/v1/transactions/${id}`);
 
-    return {
-        type: 'DELETE_TRANSACTION',
-        payload: id,
-    };
+        return {
+            type: 'DELETE_TRANSACTION',
+            payload: id,
+        };
+    } catch (error) {
+        return {
+            type: 'TRANSACTIONS_ERROR',
+            payload: error.error,
+        };
+    }
 };
 
 export const getTransactions = async (): Promise<GetTransactionsAction> => {
