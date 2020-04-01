@@ -30,7 +30,7 @@ mysqlConnnection.connect((err) => {
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/api/v1/transactions', transactionsRoutes);
+app.use(`/api/v1/transactions`, transactionsRoutes);
 app.use(errorHandler);
 
 if (process.env.NODE_ENV === 'production') {
