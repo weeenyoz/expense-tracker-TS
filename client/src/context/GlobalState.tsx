@@ -52,8 +52,8 @@ const GlobalStateProvider = (props: any) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
     const getAllTransactions = async () => {
-        const action = await getTransactions();
-        dispatch(action);
+        const getTransactionsAction = await getTransactions();
+        dispatch(getTransactionsAction);
     };
 
     useEffect(() => {
