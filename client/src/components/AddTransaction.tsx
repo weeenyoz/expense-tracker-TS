@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import { GlobalContext, TransactionProps, NewTransactionVariables } from '../context/GlobalState';
+import { addTransaction } from '../context/Actions';
 
 const AddTransaction = () => {
     const [text, setText] = useState('');
@@ -7,19 +8,17 @@ const AddTransaction = () => {
 
     const { dispatch } = useContext(GlobalContext);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const newTransaction = {
-            id: Math.floor(Math.floor(Math.random() * 10000000000000000)),
+        const newTransaction: NewTransactionVariables = {
             text,
             amount,
         };
 
-        dispatch({
-            type: 'ADD_TRANSACTION',
-            payload: newTransaction,
-        });
+        const addTransactionAction = await addTransaction(newTransaction);
+
+        dispatch(addTransactionAction);
     };
 
     return (

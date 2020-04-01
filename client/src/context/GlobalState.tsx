@@ -1,5 +1,4 @@
 import React, { useEffect, createContext, useReducer, Dispatch } from 'react';
-import axios from 'axios';
 import AppReducer from './AppReducer';
 import { getTransactions } from './Actions';
 
@@ -8,6 +7,8 @@ export interface TransactionProps {
     text: string;
     amount: number;
 }
+
+export type NewTransactionVariables = Omit<TransactionProps, 'id'>;
 
 export interface GlobalContextProps {
     transactions: Array<TransactionProps>;
@@ -23,7 +24,7 @@ export interface DeleteAction {
 
 export interface AddAction {
     type: string;
-    payload: TransactionProps | GlobalContextProps['error'];
+    payload: TransactionProps | NewTransactionVariables | GlobalContextProps['error'];
 }
 
 export interface GetTransactionsAction {

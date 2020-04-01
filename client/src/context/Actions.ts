@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AddAction, DeleteAction, GetTransactionsAction } from './GlobalState';
+import { AddAction, DeleteAction, GetTransactionsAction, NewTransactionVariables } from './GlobalState';
 
 export const deleteTransaction = async (id: number): Promise<DeleteAction> => {
     try {
@@ -25,6 +25,22 @@ export const getTransactions = async (): Promise<GetTransactionsAction> => {
         return {
             type: 'GET_TRANSACTIONS',
             payload: transactions,
+        };
+    } catch (error) {
+        return {
+            type: 'TRANSACTIONS_ERROR',
+            payload: error.error,
+        };
+    }
+};
+
+export const addTransaction = async (newTransaction: NewTransactionVariables): Promise<AddAction> => {
+    try {
+        await axios.post('/api/v1/transactions', newTransaction);
+
+        return {
+            type: 'ADD_TRANSACTION',
+            payload: newTransaction,
         };
     } catch (error) {
         return {
