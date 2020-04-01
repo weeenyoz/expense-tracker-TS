@@ -1,4 +1,5 @@
-import React, { createContext, useReducer, Dispatch } from 'react';
+import React, { useEffect, createContext, useReducer, Dispatch } from 'react';
+import axios from 'axios';
 import AppReducer from './AppReducer';
 
 export interface TransactionProps {
@@ -9,24 +10,33 @@ export interface TransactionProps {
 
 export interface GlobalContextProps {
     transactions: Array<TransactionProps>;
+    loading: boolean;
+    error: string[];
     dispatch: Dispatch<AddAction | DeleteAction>;
 }
 
 export interface DeleteAction {
     type: string;
-    payload: number;
+    payload: number | GlobalContextProps['error'];
 }
 
 export interface AddAction {
     type: string;
-    payload: TransactionProps;
+    payload: TransactionProps | GlobalContextProps['error'];
 }
 
-export type Action = DeleteAction | AddAction;
+export interface GetTransactionsAction {
+    type: string;
+    payload: TransactionProps[] | GlobalContextProps['error'];
+}
+
+export type Action = DeleteAction | AddAction | GetTransactionsAction;
 
 // initial state
 const initialState: GlobalContextProps = {
     transactions: [],
+    loading: true,
+    error: [''],
     dispatch: () => {
         return null;
     },
@@ -40,10 +50,33 @@ const GlobalStateProvider = (props: any) => {
 
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
+    const getTransactions = async () => {
+        try {
+            const result = await axios.get('/api/v1/transactions');
+            const { transactions } = result.data;
+
+            dispatch({
+                type: 'GET_TRANSACTIONS',
+                payload: transactions,
+            });
+        } catch (error) {
+            dispatch({
+                type: 'TRANSACTIONS_ERROR',
+                payload: error.error,
+            });
+        }
+    };
+
+    useEffect(() => {
+        getTransactions();
+    }, []);
+
     return (
         <GlobalContext.Provider
             value={{
                 transactions: state.transactions,
+                error: state.error,
+                loading: state.loading,
                 dispatch,
             }}
         >
