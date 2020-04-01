@@ -1,6 +1,7 @@
 import React, { useEffect, createContext, useReducer, Dispatch } from 'react';
 import axios from 'axios';
 import AppReducer from './AppReducer';
+import { getTransactions } from './Actions';
 
 export interface TransactionProps {
     id: number;
@@ -50,25 +51,13 @@ const GlobalStateProvider = (props: any) => {
 
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
-    const getTransactions = async () => {
-        try {
-            const result = await axios.get('/api/v1/transactions');
-            const { transactions } = result.data;
-
-            dispatch({
-                type: 'GET_TRANSACTIONS',
-                payload: transactions,
-            });
-        } catch (error) {
-            dispatch({
-                type: 'TRANSACTIONS_ERROR',
-                payload: error.error,
-            });
-        }
+    const getAllTransactions = async () => {
+        const action = await getTransactions();
+        dispatch(action);
     };
 
     useEffect(() => {
-        getTransactions();
+        getAllTransactions();
     }, []);
 
     return (
