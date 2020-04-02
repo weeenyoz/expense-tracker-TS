@@ -14,7 +14,7 @@ export interface GlobalContextProps {
     transactions: Array<TransactionProps>;
     loading: boolean;
     error: string[];
-    dispatch: Dispatch<AddAction | DeleteAction>;
+    dispatch: Dispatch<Action>;
 }
 
 export interface DeleteAction {
